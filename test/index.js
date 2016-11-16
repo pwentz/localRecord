@@ -1,0 +1,2 @@
+require('./localizer-test.js')
+
