@@ -59,29 +59,29 @@ describe('LocalRecord', () => {
     })
 
     context('user provides reference', () => {
-      context('record is a string', () => {
-        it('stores the string', () => {
-          const record = 'it creates!'
+      // context('record is a string', () => {
+      //   it('stores the string', () => {
+      //     const record = 'it creates!'
 
-          localRecord.create(record)('create')
+      //     localRecord.create(record)('create')
 
-          const query = localRecord.find('create')
+      //     const query = localRecord.find('create')
 
-          assert.equal(query, 'it creates!')
-        })
-      })
+      //     assert.equal(query, 'it creates!')
+      //   })
+      // })
 
-      context('record is an array', () => {
-        it('stores the array', () => {
-          const record = ['record 1', 'record 2']
+      // context('record is an array', () => {
+      //   it('stores the array', () => {
+      //     const record = ['record 1', 'record 2']
 
-          localRecord.create(record)('myArray')
+      //     localRecord.create(record)('myArray')
 
-          const query = localRecord.find('myArray')
+      //     const query = localRecord.find('myArray')
 
-          assert.deepEqual(query, record)
-        })
-      })
+      //     assert.deepEqual(query, record)
+      //   })
+      // })
 
       context('record is an object', () => {
         it('stores the object', () => {
@@ -95,28 +95,86 @@ describe('LocalRecord', () => {
         })
       })
 
-      context('record is an integer', () => {
-        it('stores the integer', () => {
-          const record = 4
+      // context('record is an integer', () => {
+      //   it('stores the integer', () => {
+      //     const record = 4
 
-          localRecord.create(record)('myInteger')
+      //     localRecord.create(record)('myInteger')
 
-          const query = localRecord.find('myInteger')
+      //     const query = localRecord.find('myInteger')
 
-          assert.equal(query, record)
-        })
+      //     assert.equal(query, record)
+      //   })
+      // })
+
+      // context('record is a float', () => {
+      //   it('stores the float', () => {
+      //     const record = 9.232
+
+      //     localRecord.create(record)('myFloat')
+
+      //     const query = localRecord.find('myFloat')
+
+      //     assert.equal(query, record)
+      //   })
+      // })
+    })
+
+    context('record reference is already taken', () => {
+      it('returns null', () => {
+        const existingRecord = { height: 'tall', hair: 'brown' }
+        const newRecord = { name: 'James' }
+
+        localRecord.create(existingRecord)('myRecord')
+        const creationAttempt = localRecord.create(newRecord)
+
+        assert.isNull(creationAttempt('myRecord'))
       })
 
-      context('record is a float', () => {
-        it('stores the float', () => {
-          const record = 9.232
+      it('does not add record to localStorage', () => {
+        const existingRecord = { height: 'tall', hair: 'brown' }
+        const newRecord = { name: 'James' }
 
-          localRecord.create(record)('myFloat')
+        localRecord.create(existingRecord)('myRecord')
+        localRecord.create(newRecord)('myRecord')
 
-          const query = localRecord.find('myFloat')
+        assert.equal(localStorage.length, 1)
+      })
+    })
 
-          assert.equal(query, record)
-        })
+    context('matching record already in localStorage', () => {
+      it('throws an error', () => {
+        const existingRecord = { height: 'tall', hair: 'brown' }
+        const duplicateRecord = { height: 'tall', hair: 'brown' }
+
+        localRecord.create(existingRecord)('myRecord')
+        const attempt = localRecord.create(duplicateRecord)
+
+        assert.throws(attempt, Error, 'record already exists')
+      })
+    })
+
+    context('existing record with one, but not all matching attrs', () => {
+      it('creates similar record', () => {
+        const existingRecord = { height: 'tall', hair: 'red' }
+        const similarRecord = { height: 'tall' }
+
+        localRecord.create(existingRecord)('myRecord')
+        localRecord.create(similarRecord)()
+
+        assert.equal(localStorage.length, 2)
+      })
+    })
+
+    context('new record with one, but not all attrs matching existing', () => {
+      it('creates the record', () => {
+        const existingRecord = { height: 'tall' }
+        const similarRecord = { height: 'tall', hair: 'red' }
+
+        localRecord.create(existingRecord)('myRecord')
+        localRecord.create(similarRecord)()
+
+        assert.equal(localStorage.length, 2)
       })
     })
   })
