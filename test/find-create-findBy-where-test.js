@@ -141,6 +141,42 @@ describe('LocalRecord', () => {
         assert.equal(localStorage.length, 1)
       })
     })
+
+    context('matching record already in localStorage', () => {
+      it('throws an error', () => {
+        const existingRecord = { height: 'tall', hair: 'brown' }
+        const duplicateRecord = { height: 'tall', hair: 'brown' }
+
+        localRecord.create(existingRecord)('myRecord')
+        const attempt = localRecord.create(duplicateRecord)
+
+        assert.throws(attempt, Error, 'record already exists')
+      })
+    })
+
+    context('existing record with one, but not all matching attrs', () => {
+      it('creates similar record', () => {
+        const existingRecord = { height: 'tall', hair: 'red' }
+        const similarRecord = { height: 'tall' }
+
+        localRecord.create(existingRecord)('myRecord')
+        localRecord.create(similarRecord)()
+
+        assert.equal(localStorage.length, 2)
+      })
+    })
+
+    context('new record with one, but not all attrs matching existing', () => {
+      it('creates the record', () => {
+        const existingRecord = { height: 'tall' }
+        const similarRecord = { height: 'tall', hair: 'red' }
+
+        localRecord.create(existingRecord)('myRecord')
+        localRecord.create(similarRecord)()
+
+        assert.equal(localStorage.length, 2)
+      })
+    })
   })
 
   // when no reference is provided, use findBy to look via properies
