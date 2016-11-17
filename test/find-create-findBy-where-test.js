@@ -43,6 +43,15 @@ describe('LocalRecord', () => {
   })
 
   describe('create', () => {
+    context('on success', () => {
+      it('returns the created object', () => {
+        const record = { recordOne: 'thing 1', recordTwo: 'thing 2'}
+
+        const createdRecord = localRecord.create(record)()
+
+        assert.deepEqual(record, createdRecord)
+      })
+    })
     // create can be user w/ or without a reference
     context('user does not provide reference', () => {
       it('saves the object', () => {
@@ -143,12 +152,12 @@ describe('LocalRecord', () => {
     })
 
     context('matching record already in localStorage', () => {
-      it('throws an error', () => {
+      it('throws an error on first method call', () => {
         const existingRecord = { height: 'tall', hair: 'brown' }
         const duplicateRecord = { height: 'tall', hair: 'brown' }
 
         localRecord.create(existingRecord)('myRecord')
-        const attempt = localRecord.create(duplicateRecord)
+        const attempt = localRecord.create.bind(localRecord, duplicateRecord)
 
         assert.throws(attempt, Error, 'record already exists')
       })
@@ -221,14 +230,15 @@ describe('LocalRecord', () => {
       })
 
       context('multiple records match params', () => {
+
         it('returns the first entry', () => {
-          const initialRecord = [1, 2, 3]
-          const matchingRecord = '123'
+          const initialRecord = { hair: 'green', face: 'red' }
+          const matchingRecord = { hair: 'green', face: 'purple' }
 
           localRecord.create(initialRecord)()
           localRecord.create(matchingRecord)()
 
-          const query = localRecord.findBy({ length: 3 })
+          const query = localRecord.findBy({ hair: 'green' })
 
           assert.deepEqual(query, initialRecord)
         })
