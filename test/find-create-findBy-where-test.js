@@ -6,30 +6,38 @@ describe('LocalRecord', () => {
   beforeEach(() => localStorage.clear())
 
   describe('find', () => {
-    // find record by provided reference
-    // provided reference is preferrable to retrieve strings, integers, or arrays
-    context('user provides a reference', () => {
-      context.skip('record is an array', () => {
-        it('retrieves the item in its original format', () => {
-          const record = ['record 1', 'record 2', 'record 3']
-          localStorage.setItem('record reference', JSON.stringify(record))
+    context('match is found', () => {
+      // find record by provided reference
+      // provided reference is preferrable to retrieve strings, integers, or arrays
+      context('user provides a reference', () => {
+        context.skip('record is an array', () => {
+          it('retrieves the item in its original format', () => {
+            const record = ['record 1', 'record 2', 'record 3']
+            localStorage.setItem('record reference', JSON.stringify(record))
 
-          const query = localRecord.find('record reference')
+            const query = localRecord.find('record reference')
 
-          assert.deepEqual(query, record)
+            assert.deepEqual(query, record)
+          })
+        })
+
+        context('record is an object', () => {
+          it('retrives the item in its original format', () => {
+            const record = { recordOne: 'thing 1', recordTwo: 'thing 2' }
+
+            localStorage.setItem('my record', JSON.stringify(record))
+
+            const query = localRecord.find('my record')
+
+            assert.deepEqual(query, record)
+          })
         })
       })
+    })
 
-      context('record is an object', () => {
-        it('retrives the item in its original format', () => {
-          const record = { recordOne: 'thing 1', recordTwo: 'thing 2' }
-
-          localStorage.setItem('my record', JSON.stringify(record))
-
-          const query = localRecord.find('my record')
-
-          assert.deepEqual(query, record)
-        })
+    context('no match is found', () => {
+      it('returns null', () => {
+        assert.isNull(localRecord.find('myRecord'))
       })
     })
   })
@@ -179,33 +187,43 @@ describe('LocalRecord', () => {
   })
 
   describe('where', () => {
-    context('multiple instances have similar properties', () => {
-      it('returns an array of all matching records', () => {
-        const recordOne = { height: 'tall', eyes: 'green' }
-        const recordTwo = { height: 'tall', eyes: 'brown' }
-        const recordThree = { height: 'tall', eyes: 'blue' }
+    context('match found', () => {
+      context('multiple instances have similar properties', () => {
+        it('returns an array of all matching records', () => {
+          const recordOne = { height: 'tall', eyes: 'green' }
+          const recordTwo = { height: 'tall', eyes: 'brown' }
+          const recordThree = { height: 'tall', eyes: 'blue' }
 
-        localRecord.create(recordOne)()
-        localRecord.create(recordTwo)()
-        localRecord.create(recordThree)()
+          localRecord.create(recordOne)()
+          localRecord.create(recordTwo)()
+          localRecord.create(recordThree)()
 
-        const query = localRecord.where({ height: 'tall' })
+          const query = localRecord.where({ height: 'tall' })
 
-        assert.sameDeepMembers(query, [recordOne, recordTwo, recordThree])
+          assert.sameDeepMembers(query, [recordOne, recordTwo, recordThree])
+        })
+      })
+
+      context('one record has matching property', () => {
+        it('returns an array of matching record', () => {
+          const recordOne = { height: 'tall', eyes: 'red' }
+          const recordTwo = { height: 'short', eyes: 'indigo' }
+
+          localRecord.create(recordOne)()
+          localRecord.create(recordTwo)()
+
+          const query = localRecord.where({ height: 'short' })
+
+          assert.deepEqual(query, [recordTwo])
+        })
       })
     })
 
-    context('one record has matching property', () => {
-      it('returns an array of matching record', () => {
-        const recordOne = { height: 'tall', eyes: 'red' }
-        const recordTwo = { height: 'short', eyes: 'indigo' }
+    context('no match found', () => {
+      it('returns an empty array', () => {
+        const query = localRecord.where({ hair: 'brown' })
 
-        localRecord.create(recordOne)()
-        localRecord.create(recordTwo)()
-
-        const query = localRecord.where({ height: 'short' })
-
-        assert.deepEqual(query, [recordTwo])
+        assert.deepEqual(query, [])
       })
     })
   })
