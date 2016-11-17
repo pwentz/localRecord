@@ -1,2 +1,3 @@
-require('./localizer-test.js')
+require('./find-create-findBy-where-test.js')
+require('./all-update-test.js')
 
