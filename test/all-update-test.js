@@ -1,4 +1,5 @@
 const assert = require('chai').assert
+const chai = require('chai')
 const LocalRecord = require('./../lib/localRecord')
 
 describe('all', () => {
@@ -31,29 +32,36 @@ describe('update', () => {
   const localRecord = new LocalRecord()
   beforeEach(() => localStorage.clear())
 
-  context('record is an object', () => {
-    context('params match properties on object', () => {
-      it('takes the record, and an object of updated properties', () => {
-        const record = { height: 'tall', hair: 'brown' }
+  context('params match properties on object', () => {
+    it('takes the record, and an object of updated properties', () => {
+      const record = { height: 'tall', hair: 'brown' }
 
-        localRecord.create(record)()
+      localRecord.create(record)()
 
-        localRecord.update(record, { height: 'short' })
+      localRecord.update(record, { height: 'short' })
 
-        assert.deepEqual(record, { height: 'short', hair: 'brown' })
-      })
+      assert.deepEqual(record, { height: 'short', hair: 'brown' })
     })
+  })
 
-    context('params do not match properties on object', () => {
-      it('creates additional properties for that object', () => {
-        const record = { height: 'tall' }
+  context('params do not match properties on object', () => {
+    it('creates additional properties for that object', () => {
+      const record = { height: 'tall' }
 
-        localRecord.create(record)()
+      localRecord.create(record)()
 
-        localRecord.update(record, { eyes: 'green' })
+      localRecord.update(record, { eyes: 'green' })
 
-        assert.deepEqual(record, { height: 'tall', eyes: 'green' })
-      })
+      assert.deepEqual(record, { height: 'tall', eyes: 'green' })
+    })
+  })
+
+  context('record does not exist', () => {
+    it('throws an error', () => {
+      const record = { height: 'tall' }
+      const query = localRecord.update.bind(localRecord, record, { height: 'short' })
+
+      assert.throws(query, ReferenceError, 'record does not exist')
     })
   })
 })
