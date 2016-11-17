@@ -69,7 +69,6 @@ describe('destroyAll', () => {
 
       const forgottenRecords = localRecord.destroyAll()
 
-      console.log(forgottenRecords)
       assert.sameDeepMembers(forgottenRecords, [recordOne, recordTwo, recordThree])
     })
   })
