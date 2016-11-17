@@ -5,6 +5,7 @@ const LocalRecord = require('./../lib/localRecord')
 describe('all', () => {
   const localRecord = new LocalRecord()
   beforeEach(() => localStorage.clear())
+  afterEach(() => localStorage.clear())
 
   context('there are records in localStorage', () => {
     it('returns an array of all items in localStorage', () => {
@@ -28,9 +29,22 @@ describe('all', () => {
 })
 
 describe('update', () => {
-  // ADD EDGE CASES
   const localRecord = new LocalRecord()
   beforeEach(() => localStorage.clear())
+  afterEach(() => localStorage.clear())
+
+  context('on success', () => {
+    it('returns the updated record', () => {
+      const record = { height: 'short' }
+
+      localRecord.create(record)()
+
+      const updatedRecord = localRecord.update(record, { height: 'tall' })
+
+      assert.deepEqual(updatedRecord, { height: 'tall' })
+    })
+  })
+
 
   context('params match properties on object', () => {
     it('takes the record, and an object of updated properties', () => {
@@ -42,6 +56,7 @@ describe('update', () => {
 
       assert.deepEqual(record, { height: 'short', hair: 'brown' })
     })
+
   })
 
   context('params do not match properties on object', () => {
