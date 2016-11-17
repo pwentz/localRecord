@@ -1,8 +1,8 @@
 const assert = require('chai').assert
-const Localizer = require('./../lib/localizer')
+const LocalRecord = require('./../lib/localRecord')
 
 describe('all', () => {
-  const localizer = new Localizer()
+  const localRecord = new LocalRecord()
   beforeEach(() => localStorage.clear())
 
   it('returns an array of all items in localStorage', () => {
@@ -10,16 +10,16 @@ describe('all', () => {
     const recordTwo = 'wowowowo'
     const recordThree = ['thing one', { eyes: 'blue' }, 5]
 
-    localizer.create(recordOne)()
-    localizer.create(recordTwo)()
-    localizer.create(recordThree)()
+    localRecord.create(recordOne)()
+    localRecord.create(recordTwo)()
+    localRecord.create(recordThree)()
 
-    assert.sameDeepMembers(localizer.all(), [recordOne, recordTwo, recordThree])
+    assert.sameDeepMembers(localRecord.all(), [recordOne, recordTwo, recordThree])
   })
 })
 
 describe('update', () => {
-  const localizer = new Localizer()
+  const localRecord = new LocalRecord()
   beforeEach(() => localStorage.clear())
 
   context('record is an object', () => {
@@ -27,9 +27,9 @@ describe('update', () => {
       it('takes the record, and an object of updated properties', () => {
         const record = { height: 'tall', hair: 'brown' }
 
-        localizer.create(record)()
+        localRecord.create(record)()
 
-        localizer.update(record, { height: 'short' })
+        localRecord.update(record, { height: 'short' })
 
         assert.deepEqual(record, { height: 'short', hair: 'brown' })
       })
@@ -39,9 +39,9 @@ describe('update', () => {
       it('creates additional properties for that object', () => {
         const record = { height: 'tall' }
 
-        localizer.create(record)()
+        localRecord.create(record)()
 
-        localizer.update(record, { eyes: 'green' })
+        localRecord.update(record, { eyes: 'green' })
 
         assert.deepEqual(record, { height: 'tall', eyes: 'green' })
       })

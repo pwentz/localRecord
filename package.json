@@ -1,5 +1,5 @@
 {
-  "name": "Localizer",
+  "name": "LocalRecord",
   "version": "0.0.1",
   "description": "ORM For localStorage",
   "main": "./lib/main.js",

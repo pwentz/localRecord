@@ -1,8 +1,8 @@
 const assert = require('chai').assert
-const Localizer = require('./../lib/localizer')
+const LocalRecord = require('./../lib/localRecord')
 
-describe('Localizer', () => {
-  const localizer = new Localizer()
+describe('LocalRecord', () => {
+  const localRecord = new LocalRecord()
   beforeEach(() => localStorage.clear())
 
   describe('find', () => {
@@ -14,7 +14,7 @@ describe('Localizer', () => {
           const formattedItem = JSON.stringify('my string record')
           localStorage.setItem('record reference', formattedItem)
 
-          const query = localizer.find('record reference')
+          const query = localRecord.find('record reference')
 
           assert.equal(query, 'my string record')
         })
@@ -25,7 +25,7 @@ describe('Localizer', () => {
           const record = ['record 1', 'record 2', 'record 3']
           localStorage.setItem('record reference', JSON.stringify(record))
 
-          const query = localizer.find('record reference')
+          const query = localRecord.find('record reference')
 
           assert.deepEqual(query, record)
         })
@@ -37,7 +37,7 @@ describe('Localizer', () => {
 
           localStorage.setItem('my record', JSON.stringify(record))
 
-          const query = localizer.find('my record')
+          const query = localRecord.find('my record')
 
           assert.deepEqual(query, record)
         })
@@ -49,7 +49,7 @@ describe('Localizer', () => {
 
           localStorage.setItem('my integer', JSON.stringify(record))
 
-          const query = localizer.find('my integer')
+          const query = localRecord.find('my integer')
 
           assert.equal(query, record)
         })
@@ -61,7 +61,7 @@ describe('Localizer', () => {
 
           localStorage.setItem('my float', JSON.stringify(record))
 
-          const query = localizer.find('my float')
+          const query = localRecord.find('my float')
 
           assert.equal(query, record)
         })
@@ -75,7 +75,7 @@ describe('Localizer', () => {
       it('saves the object', () => {
         const record = { recordOne: 'thing 1', recordTwo: 'thing 2'}
 
-        const createRecord = localizer.create(record)
+        const createRecord = localRecord.create(record)
 
         assert.equal(localStorage.length, 0)
 
@@ -90,9 +90,9 @@ describe('Localizer', () => {
         it('stores the string', () => {
           const record = 'it creates!'
 
-          localizer.create(record)('create')
+          localRecord.create(record)('create')
 
-          const query = localizer.find('create')
+          const query = localRecord.find('create')
 
           assert.equal(query, 'it creates!')
         })
@@ -102,9 +102,9 @@ describe('Localizer', () => {
         it('stores the array', () => {
           const record = ['record 1', 'record 2']
 
-          localizer.create(record)('myArray')
+          localRecord.create(record)('myArray')
 
-          const query = localizer.find('myArray')
+          const query = localRecord.find('myArray')
 
           assert.deepEqual(query, record)
         })
@@ -114,9 +114,9 @@ describe('Localizer', () => {
         it('stores the object', () => {
           const record = { recordOne: 'thing 1', recordTwo: 'thing 2'}
 
-          localizer.create(record)('myObject')
+          localRecord.create(record)('myObject')
 
-          const query = localizer.find('myObject')
+          const query = localRecord.find('myObject')
 
           assert.deepEqual(query, record)
         })
@@ -126,9 +126,9 @@ describe('Localizer', () => {
         it('stores the integer', () => {
           const record = 4
 
-          localizer.create(record)('myInteger')
+          localRecord.create(record)('myInteger')
 
-          const query = localizer.find('myInteger')
+          const query = localRecord.find('myInteger')
 
           assert.equal(query, record)
         })
@@ -138,9 +138,9 @@ describe('Localizer', () => {
         it('stores the float', () => {
           const record = 9.232
 
-          localizer.create(record)('myFloat')
+          localRecord.create(record)('myFloat')
 
-          const query = localizer.find('myFloat')
+          const query = localRecord.find('myFloat')
 
           assert.equal(query, record)
         })
@@ -155,9 +155,9 @@ describe('Localizer', () => {
         it('returns the record', () => {
           const record = { height: 'tall', eyes: 'brown' }
 
-          localizer.create(record)()
+          localRecord.create(record)()
 
-          const query = localizer.findBy({ height: 'tall' })
+          const query = localRecord.findBy({ height: 'tall' })
 
           assert.deepEqual(record, query)
         })
@@ -168,10 +168,10 @@ describe('Localizer', () => {
           const similarRecord = { height: 'tall', eyes: 'brown', sex: 'male' }
           const matchingRecord = { height: 'tall', eyes: 'brown', sex: 'female' }
 
-          localizer.create(matchingRecord)()
-          localizer.create(similarRecord)()
+          localRecord.create(matchingRecord)()
+          localRecord.create(similarRecord)()
 
-          const query = localizer.findBy({ height: 'tall', sex: 'female' })
+          const query = localRecord.findBy({ height: 'tall', sex: 'female' })
 
           assert.deepEqual(matchingRecord, query)
         })
@@ -182,9 +182,9 @@ describe('Localizer', () => {
       it('can query by length', () => {
         const record = [2, 3, 4, 5, 6]
 
-        localizer.create(record)()
+        localRecord.create(record)()
 
-        const query = localizer.findBy({ length: 5 })
+        const query = localRecord.findBy({ length: 5 })
 
         assert.deepEqual(query, record)
       })
@@ -195,10 +195,10 @@ describe('Localizer', () => {
         const initialRecord = [1, 2, 3]
         const matchingRecord = '123'
 
-        localizer.create(initialRecord)()
-        localizer.create(matchingRecord)()
+        localRecord.create(initialRecord)()
+        localRecord.create(matchingRecord)()
 
-        const query = localizer.findBy({ length: 3 })
+        const query = localRecord.findBy({ length: 3 })
 
         assert.deepEqual(query, initialRecord)
       })
@@ -212,11 +212,11 @@ describe('Localizer', () => {
         const recordTwo = { height: 'tall', eyes: 'brown' }
         const recordThree = { height: 'tall', eyes: 'blue' }
 
-        localizer.create(recordOne)()
-        localizer.create(recordTwo)()
-        localizer.create(recordThree)()
+        localRecord.create(recordOne)()
+        localRecord.create(recordTwo)()
+        localRecord.create(recordThree)()
 
-        const query = localizer.where({ height: 'tall' })
+        const query = localRecord.where({ height: 'tall' })
 
         assert.sameDeepMembers(query, [recordOne, recordTwo, recordThree])
       })
@@ -227,10 +227,10 @@ describe('Localizer', () => {
         const recordOne = { height: 'tall', eyes: 'red' }
         const recordTwo = { height: 'short', eyes: 'indigo' }
 
-        localizer.create(recordOne)()
-        localizer.create(recordTwo)()
+        localRecord.create(recordOne)()
+        localRecord.create(recordTwo)()
 
-        const query = localizer.where({ height: 'short' })
+        const query = localRecord.where({ height: 'short' })
 
         assert.deepEqual(query, [recordTwo])
       })
