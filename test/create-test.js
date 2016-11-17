@@ -71,7 +71,7 @@ describe('create', () => {
       localRecord.create(existingRecord)('myRecord')
       const attempt = localRecord.create.bind(localRecord, duplicateRecord)
 
-      assert.throws(attempt, Error, 'record already exists')
+      assert.throws(attempt, ReferenceError, 'record already exists')
     })
   })
 
