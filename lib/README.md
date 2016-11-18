@@ -1,11 +1,27 @@
 ## LocalRecord
 an ORM for localStorage that works like ActiveRecord
 
+### Table of Contents
+
 ## Getting Started
 I did my best to replicate the way ActiveRecord works with these functions,
 so that those familiar with the popular ORM can pick up this module right away.
 
-#### .create
+#### .all()
+To retrieve all the objects you have in localStorage, simply use `.all()`
+```javascript
+// pretend the following items are already in localStorage
+// { wow: 'cool'}
+// { ok: 'neat' }
+// { super: 'awesome' }
+const localRecord = new LocalRecord()
+localRecord.all()
+// returns [{ wow: 'cool' },
+//          { ok: 'super' },
+//          { super: 'awesome' }]
+```
+
+#### .create()
 When called, the `.create` function takes an argument that is the object that you want to create, it passed anything other than an object - an error will be thrown.
 ```javascript
 localRecord = new LocalRecord()
@@ -91,4 +107,87 @@ const newRecord = localRecord.create({ wow: 'neat'})
 const mySavedRecord = newRecord()
 
 mySavedRecord // returns { wow: 'neat' }
+```
+
+#### Update
+Similar to the `.create()` function, the `.update()` function also returns a curried function - but unlike `.create()` (and similar to ActiveRecord's update methods), `.update()` is a little more rigid with what it allows.
+```javascript
+localRecord.create({ wow: 'cool' })()
+
+// first argument MUST be the object
+const updatedRecord = localRecord.update({ wow: 'cool' })()
+// function returns updatedRecord on success
+```
+```javascript
+localRecord.create({ wow: 'cool' })()
+
+localRecord.update('myObject')()
+// throws an InvalidArgumentError on second call if first function
+// doesn't receive an object
+```
+```javascript
+// this record is not saved
+const nonExistentRecord = { wow: 'cool' }
+
+localRecord.update(nonExistentRecord)
+// throws a ReferenceError on first call if object does not exist in storage
+```
+
+Also, similar to ActiveRecord, you cannot update properties that don't exist on the object
+```javascript
+const existingObject = { wow: 'cool' }
+localRecord.create(existingObject)()
+
+localRecord.update(existingObject)({ ok: 'neat' })
+// throws an UnknownPropertyError because 'ok' is not a property
+// on existing object
+```
+
+If you want to add a property to an existing object, you must use the improvised...
+
+##### .createProperty()
+
+`.createProperty()` does not exist on ActiveRecord, but is included to allow users
+to further update an existing object in storage.
+```javascript
+const existingObject = { wow: 'cool' }
+localRecord.create(existingObject)()
+
+// first argument is existing object
+// second argument is properties you wish to add (can be more than 1)
+localRecord.createProperty(existingObject, { ok: 'neat', super: 'awesome' })
+// returns { wow: 'cool', ok: 'neat', super: 'awesome' }
+```
+
+#### .destroy()
+`.destroy()` works exactly like you would expect:
+```javascript
+const existingRecord = { wow: 'ok' }
+localRecord.create(existingRecord)()
+
+localRecord.destroy(existingRecord)
+// returns { wow: 'ok' }
+```
+```javascript
+const nonExistentRecord = { wow: 'ok' }
+
+localRecord.destroy(nonExistentRecord)
+// throws a ReferenceError if record is not in storage
+```
+
+#### .destroyAll()
+`.destroyAll()` also operates much like ActiveRecord's `destroy_all`
+```javascript
+const firstRecord = { wow: 'ok' }
+const secondRecord = { ok: 'neat' }
+const thirdRecord = { super: 'awesome' }
+
+localRecord.create(firstRecord)()
+localRecord.create(secondRecord)()
+localRecord.create(thirdRecord)()
+
+localRecord.destroyAll()
+// returns [ { wow: 'ok' },
+//           { ok: 'neat' },
+//           { super: 'awesome' }]
 ```
