@@ -54,14 +54,14 @@ describe('update', () => {
   })
 
   context('user passes anything but an object', () => {
-    it('throws a TypeError on second function call', () => {
+    it('throws an ArgumentError on second function call', () => {
       const record = { height: 'tall' }
 
       localRecord.create(record)()
 
       const attempt = localRecord.update(record).bind(localRecord, [{ height: 'short' }])
 
-      assert.throws(attempt, TypeError, 'expected Object, but got Array instead')
+      assert.throws(attempt, Error, 'expected Object, but got Array instead')
     })
   })
 })

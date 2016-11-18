@@ -61,7 +61,7 @@ describe('findBy', () => {
     it('throws a TypeError', () => {
       const attempt = localRecord.findBy.bind(localRecord, 'hair = blue')
 
-      assert.throws(attempt, TypeError, 'expected Object, but got String instead')
+      assert.throws(attempt, Error, 'expected Object, but got String instead')
     })
   })
 })
