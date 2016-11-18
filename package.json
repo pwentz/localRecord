@@ -2,7 +2,7 @@
   "name": "LocalRecord",
   "version": "0.0.1",
   "description": "ORM For localStorage",
-  "main": "./lib/main.js",
+  "main": "./lib/localRecord.js",
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pwentz/localizer"
+    "url": "https://github.com/pwentz/localRecord"
   },
-  "author": "Pat Wentz",
+  "author": "pwentz",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pwentz/localizer"
+    "url": "https://github.com/pwentz/localRecord/issues"
   },
-  "homepage": "https://github.com/pwentz/localizer",
+  "homepage": "https://github.com/pwentz/localRecord",
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-core": "^6.13.2",
@@ -36,6 +36,7 @@
   },
   "keywords": [
     "ORM",
-    "localStorage"
+    "localStorage",
+    "Active Record"
   ]
 }
