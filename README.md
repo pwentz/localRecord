@@ -2,16 +2,26 @@
 an ORM for localStorage that works like ActiveRecord
 
 ### Table of Contents
-[All](https://github.com/pwentz/localRecord#.all())
-[Create](https://github.com/pwentz/localRecord#.create())
-[Find](https://github.com/pwentz/localRecord#.find())
-[FindBy](https://github.com/pwentz/localRecord#.findBy())
-[Where](https://github.com/pwentz/localRecord#.where())
+
+[All](https://github.com/pwentz/localRecord#all)
+
+[Create](https://github.com/pwentz/localRecord#create)
+
+[Find](https://github.com/pwentz/localRecord#find)
+
+[FindBy](https://github.com/pwentz/localRecord#findBy)
+
+[Where](https://github.com/pwentz/localRecord#where)
+
 [Validations](https://github.com/pwentz/localRecord#validations)
-[Update](https://github.com/pwentz/localRecord#.update())
-[CreateProperty](https://github.com/pwentz/localRecord#.createProperty())
-[Destroy](https://github.com/pwentz/localRecord#.destroy())
-[DestroyAll](https://github.com/pwentz/localRecord#.destroyAll())
+
+[Update](https://github.com/pwentz/localRecord#update)
+
+[CreateProperty](https://github.com/pwentz/localRecord#createProperty)
+
+[Destroy](https://github.com/pwentz/localRecord#destroy)
+
+[DestroyAll](https://github.com/pwentz/localRecord#destroyAll)
 
 
 ## Getting Started
