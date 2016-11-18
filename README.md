@@ -80,7 +80,7 @@ const records = localRecord.where({ height: 'tall' })
 ```
 
 ##### Warning
-Similar to create, `.findBy()`, and `.where()` will throw an error if passed anything other than an object.
+Similar to `.create()`, `.findBy()`, and `.where()` will throw an error if passed anything other than an object.
 ```javascript
 localRecord.create({ height: 'tall', eyes: 'brown' })()
 
@@ -160,7 +160,7 @@ localRecord.update(existingObject)({ ok: 'neat' })
 
 If you want to add a property to an existing object, you must use the improvised...
 
-### .createProperty()
+## .createProperty()
 
 `.createProperty()` does not exist on ActiveRecord, but is included to allow users
 to further update an existing object in storage.
