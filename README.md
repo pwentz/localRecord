@@ -1,5 +1,6 @@
 ## LocalRecord
-an ORM for localStorage that works like ActiveRecord
+an ORM for localStorage that works like ActiveRecord. I did my best to replicate the way ActiveRecord works with these functions,
+so that those familiar with the popular ORM can pick up this module right away.
 
 ### Table of Contents
 - [All](https://github.com/pwentz/localRecord#all)
@@ -15,8 +16,7 @@ an ORM for localStorage that works like ActiveRecord
 
 
 ## Getting Started
-I did my best to replicate the way ActiveRecord works with these functions,
-so that those familiar with the popular ORM can pick up this module right away.
+
 
 ## .all()
 To retrieve all the objects you have in localStorage, simply use `.all()`
