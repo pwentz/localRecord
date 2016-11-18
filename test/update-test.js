@@ -33,14 +33,14 @@ describe('update', () => {
   })
 
   context('params do not match properties on object', () => {
-    it('creates additional properties for that object', () => {
+    it('throws an UnknownAttribute error', () => {
       const record = { height: 'tall' }
 
       localRecord.create(record)()
 
-      localRecord.update(record)({ eyes: 'green' })
+      const attempt = localRecord.update(record).bind(localRecord, { eyes: 'green' })
 
-      assert.deepEqual(record, { height: 'tall', eyes: 'green' })
+      assert.throws(attempt, Error, "unknown property 'eyes' for record")
     })
   })
 
