@@ -1,5 +1,6 @@
 require('./all-test')
 require('./create-test')
+require('./createProperty-test')
 require('./destroy-test')
 require('./destroyAll-test')
 require('./find-test')
