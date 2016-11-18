@@ -46,10 +46,10 @@ describe('where', () => {
   })
 
   context('user passes any argument but object', () => {
-    it('throws a TypeError', () => {
+    it('throws an ArgumentError', () => {
       const attempt = localRecord.where.bind(localRecord, 5)
 
-      assert.throws(attempt, TypeError, 'expected Object, but got Number instead')
+      assert.throws(attempt, Error, 'expected Object, but got Number instead')
     })
   })
 })

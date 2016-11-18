@@ -100,12 +100,12 @@ describe('create', () => {
   })
 
   context('user tries to pass anything but an object', () => {
-    it('throws an error on first function', () => {
+    it('throws an ArgumentError on first function', () => {
       const falseRecord = ['one', 'two', 'three']
 
       const falseAttempt = localRecord.create.bind(localRecord, falseRecord)
 
-      assert.throws(falseAttempt, TypeError, 'expected Object, but got Array instead')
+      assert.throws(falseAttempt, Error, 'expected Object, but got Array instead')
     })
   })
 })
