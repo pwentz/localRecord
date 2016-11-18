@@ -42,14 +42,14 @@ describe('create', () => {
   })
 
   context('record reference is already taken', () => {
-    it('returns null', () => {
+    it('returns false on second call', () => {
       const existingRecord = { height: 'tall', hair: 'brown' }
       const newRecord = { name: 'James' }
 
       localRecord.create(existingRecord)('myRecord')
       const creationAttempt = localRecord.create(newRecord)
 
-      assert.isNull(creationAttempt('myRecord'))
+      assert.isFalse(creationAttempt('myRecord'))
     })
 
     it('does not add record to localStorage', () => {
@@ -64,14 +64,14 @@ describe('create', () => {
   })
 
   context('matching record already in localStorage', () => {
-    it('throws an error on first method call', () => {
+    it('returns false on second call', () => {
       const existingRecord = { height: 'tall', hair: 'brown' }
       const duplicateRecord = { height: 'tall', hair: 'brown' }
 
-      localRecord.create(existingRecord)('myRecord')
-      const attempt = localRecord.create.bind(localRecord, duplicateRecord)
+      localRecord.create(existingRecord)()
+      const attempt = localRecord.create(duplicateRecord)
 
-      assert.throws(attempt, ReferenceError, 'record already exists')
+      assert.isFalse(attempt())
     })
   })
 
