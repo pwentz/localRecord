@@ -1,6 +1,6 @@
 ## LocalRecord
-an ORM for localStorage that works like ActiveRecord. I did my best to replicate the way ActiveRecord works with these functions,
-so that those familiar with the popular ORM can pick up this module right away.
+an object relational mapper for localStorage that works like ActiveRecord, the popular ORM from the Rails framework. I did my best to replicate the way ActiveRecord works with these functions,
+so that those coming from Rails can pick this up right away.
 
 ### Table of Contents
 - [All](https://github.com/pwentz/localRecord#all)
