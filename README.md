@@ -160,7 +160,7 @@ localRecord.update(existingObject)({ ok: 'neat' })
 
 If you want to add a property to an existing object, you must use the improvised...
 
-#### .createProperty()
+### .createProperty()
 
 `.createProperty()` does not exist on ActiveRecord, but is included to allow users
 to further update an existing object in storage.
