@@ -8,7 +8,6 @@ so that those coming from Rails can pick this up right away.
 - [Find](https://github.com/pwentz/localRecord#find)
 - [FindBy](https://github.com/pwentz/localRecord#findBy)
 - [Where](https://github.com/pwentz/localRecord#where)
-- [Validations](https://github.com/pwentz/localRecord#validations)
 - [Update](https://github.com/pwentz/localRecord#update)
 - [CreateProperty](https://github.com/pwentz/localRecord#createProperty)
 - [Destroy](https://github.com/pwentz/localRecord#destroy)
@@ -40,6 +39,50 @@ localRecord = new LocalRecord()
 localRecord.create({ wow: 'cool' }) // <= fine
 
 localRecord.create('myRecord') // <= throws ArgumentError
+```
+
+`.create()` returns a curried function so that LocalRecord can simulate the `.new` and `.create` validation flow that gives ActiveRecord its reliable flexibility.
+```javascript
+const newRecord = localRecord.create({ wow: 'neat' })
+if (newRecord()) {
+  // success control flow
+}
+else {
+  // failure control flow
+}
+```
+```javascript
+// this is useful for memoizing your variables if your jumbling a lot of manual references
+const newRecord = localRecord.create({ wow: 'neat' })
+
+const savedRecord = newRecord('mightBeTaken') || newRecord()
+
+```
+
+The second function call will return false under two conditions:
+ - An exact copy of the object already exists in localStorage
+ ```javascript
+ localRecord.create({ wow: 'cool' })()
+ const newRecord = localRecord.create({ wow: 'cool' })
+
+ newRecord() // will return false
+ ```
+ - The ID parameter that the user passed is already taken
+ ```javascript
+ localRecord.create({ wow: 'cool' })('myRecord')
+ const newRecord = localRecord.create({ ok: 'neat'})
+
+ newRecord('myRecord') // will return false
+ ```
+
+If creation was a success, the second function call should return the object that was saved:
+```javascript
+const newRecord = localRecord.create({ wow: 'neat'})
+
+const mySavedRecord = newRecord()
+
+console.log(mySavedRecord)
+// { wow: 'neat' }
 ```
 
 ### .find()
@@ -98,50 +141,6 @@ const record = localRecord.where('tall')
 // throws InvalidArgumentError
 ```
 
-## Validations
-The reason `.create()` returns a curried function is so that LocalRecord can simulate the `.new` and `.create` validation flow that gives ActiveRecord its reliable flexibility.
-```javascript
-const newRecord = localRecord.create({ wow: 'neat' })
-if (newRecord()) {
-  // success control flow
-}
-else {
-  // failure control flow
-}
-```
-```javascript
-// this is useful for memoizing your variables if your jumbling a lot of manual references
-const newRecord = localRecord.create({ wow: 'neat' })
-
-const savedRecord = newRecord('mightBeTaken') || newRecord()
-
-```
-
-The second function call will return false under two conditions:
- - An exact copy of the object already exists in localStorage
- ```javascript
- localRecord.create({ wow: 'cool' })()
- const newRecord = localRecord.create({ wow: 'cool' })
-
- newRecord() // will return false
- ```
- - The ID parameter that the user passed is already taken
- ```javascript
- localRecord.create({ wow: 'cool' })('myRecord')
- const newRecord = localRecord.create({ ok: 'neat'})
-
- newRecord('myRecord') // will return false
- ```
-
-If creation was a success, the second function call should return the object that was saved:
-```javascript
-const newRecord = localRecord.create({ wow: 'neat'})
-
-const mySavedRecord = newRecord()
-
-console.log(mySavedRecord)
-// { wow: 'neat' }
-```
 
 ## .update()
 Similar to ActiveRecord's update methods, `.update()` is a slightly more rigid than `.create()` with what it allows.
