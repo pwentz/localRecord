@@ -40,9 +40,9 @@ const localRecord = new LocalRecord()
 
 const myObject = { wow: 'cool' }
 
-localRecord.create(myObject)(123) <= works
+localRecord.create(myObject)(123) // <= works
 
-localRecord.create(myObject)() <= also works
+localRecord.create(myObject)() // <= also works
 ```
 
 `.create()` returns a function so that LocalRecord can simulate the `.new` and `.create` validation flow that gives ActiveRecord its reliable flexibility.
