@@ -33,15 +33,19 @@ console.log(localRecord.all())
 ```
 
 ## .create()
-When called, the `.create` function takes an argument that is the object that you want to create, if passed anything other than an object - an error will be thrown.
-```javascript
-localRecord = new LocalRecord()
-localRecord.create({ wow: 'cool' }) // <= fine
 
-localRecord.create('myRecord') // <= throws ArgumentError
+When called, the `.create` function takes an argument that is the object that you want to create, and returns an uninvoked function. The second argument for the function is the ID/reference to the object you're saving. You can pass a string or number as an argument if you'd like to keep a manual reference...or you can not pass an argument and LocalRecord will auto-generate a unique key for you.
+```javascript
+const localRecord = new LocalRecord()
+
+const myObject = { wow: 'cool' }
+
+localRecord.create(myObject)(123) <= works
+
+localRecord.create(myObject)() <= also works
 ```
 
-`.create()` returns a curried function so that LocalRecord can simulate the `.new` and `.create` validation flow that gives ActiveRecord its reliable flexibility.
+`.create()` returns a function so that LocalRecord can simulate the `.new` and `.create` validation flow that gives ActiveRecord its reliable flexibility.
 ```javascript
 const newRecord = localRecord.create({ wow: 'neat' })
 if (newRecord()) {
@@ -58,7 +62,13 @@ const newRecord = localRecord.create({ wow: 'neat' })
 const savedRecord = newRecord('mightBeTaken') || newRecord()
 
 ```
+If the first create function is passed anything other than an object - an error will be thrown immediately.
+```javascript
+localRecord = new LocalRecord()
+localRecord.create({ wow: 'cool' }) // <= fine
 
+localRecord.create('myRecord') // <= throws ArgumentError
+```
 The second function call will return false under two conditions:
  - An exact copy of the object already exists in localStorage
  ```javascript
