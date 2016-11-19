@@ -1,6 +1,6 @@
 {
   "name": "LocalRecord",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "ORM For localStorage",
   "main": "./lib/localRecord.js",
   "scripts": {
@@ -35,6 +35,6 @@
   "keywords": [
     "ORM",
     "localStorage",
-    "Active Record"
+    "browser storage"
   ]
 }

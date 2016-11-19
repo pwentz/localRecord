@@ -23,11 +23,22 @@ describe('update', () => {
     it('takes the record, and an object of updated properties', () => {
       const record = { height: 'tall', hair: 'brown' }
 
-      localRecord.create(record)()
+      localRecord.create(record)('myRecord')
+
+      localRecord.update(record, { height: 'short' })
+      const foundRecord = localRecord.find('myRecord')
+
+      assert.deepEqual(foundRecord, { height: 'short', hair: 'brown' })
+    })
+
+    it('does not create another object', () => {
+      const record = { height: 'tall', hair: 'brown' }
+
+      localRecord.create(record)('myRecord')
 
       localRecord.update(record, { height: 'short' })
 
-      assert.deepEqual(record, { height: 'short', hair: 'brown' })
+      assert.equal(localStorage.length, 1)
     })
 
   })
