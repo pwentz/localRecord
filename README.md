@@ -51,8 +51,8 @@ else {
   // failure control flow
 }
 ```
+This is also useful for memoizing your variables if your jumbling a lot of manual references.
 ```javascript
-// this is useful for memoizing your variables if your jumbling a lot of manual references
 const newRecord = localRecord.create({ wow: 'neat' })
 
 const savedRecord = newRecord('mightBeTaken') || newRecord()
