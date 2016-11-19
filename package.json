@@ -35,6 +35,6 @@
   "keywords": [
     "ORM",
     "localStorage",
-    "Active Record"
+    "browser storage"
   ]
 }
