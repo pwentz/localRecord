@@ -15,7 +15,12 @@ so that those coming from Rails can pick this up right away.
 
 
 ## Getting Started
+`npm install LocalRecord`
+```javascript
+const LocalRecord = require('LocalRecord')
 
+const whateverYouWantToCallIt = new LocalRecord()
+```
 
 ## .all()
 To retrieve all the objects you have in localStorage, simply use `.all()`
