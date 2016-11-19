@@ -97,7 +97,7 @@ console.log(mySavedRecord)
 
 ### .find()
 
-The `.create` function returns a curried function. So the object isn't written into localStorage until second function is called.
+The `.create` function returns an uninvoked function. So the object isn't written into localStorage until second function is called.
 
 If you'd like to be able to easily reference this object later down the line, you can pass an optional argument to the second function call which would serve as the object's id. Otherwise, a random ID will be dynamically generated.
 
