@@ -15,7 +15,9 @@ so that those coming from Rails can pick this up right away.
 
 
 ## Getting Started
-`npm install LocalRecord`
+```
+npm install LocalRecord
+```
 ```javascript
 const LocalRecord = require('LocalRecord')
 
