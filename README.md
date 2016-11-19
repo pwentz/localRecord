@@ -21,7 +21,7 @@ so that those coming from Rails can pick this up right away.
 ## .all()
 To retrieve all the objects you have in localStorage, simply use `.all()`
 ```javascript
-// if the following items are already in localStorage
+// if the following *stringified* items are already in localStorage
 
 // { wow: 'cool'}
 // { ok: 'neat' }
