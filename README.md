@@ -22,16 +22,15 @@ so that those coming from Rails can pick this up right away.
 To retrieve all the objects you have in localStorage, simply use `.all()`
 ```javascript
 // pretend the following items are already in localStorage
+
 // { wow: 'cool'}
 // { ok: 'neat' }
 // { super: 'awesome' }
 
 const localRecord = new LocalRecord()
-localRecord.all()
 
-// returns [{ wow: 'cool' },
-//          { ok: 'super' },
-//          { super: 'awesome' }]
+console.log(localRecord.all())
+// [{ wow: 'cool' }, { ok: 'super' }, { super: 'awesome' }]
 ```
 
 ## .create()
@@ -52,21 +51,31 @@ If you'd like to be able to easily reference this object later down the line, yo
 ```javascript
 localRecord.create({ wow: 'cool' })('myRecord')
 
-// now this object can be referenced later using .find()
-const record = localRecord.find('myRecord') // <= { wow: 'cool' }
+// now the object can be referenced later using .find()
+
+const record = localRecord.find('myRecord')
+
+console.log(record)
+// { wow: 'cool' }
 ```
 
 ### .findBy()
 If you choose to let LocalRecord generate your id, you can retrieve it by searching for its props using `.findBy()`
 
 ```javascript
-localRecord.create({ wow: 'cool' })() // <= ID is auto-generated
+const newRecord = { wow: 'cool', awesome: 'neat' }
+localRecord.create(newRecord)() // <= ID is auto-generated
 
 // reference object by querying for its props
-const record = localRecord.findBy({ wow: 'cool' }) // <= { wow: 'cool' }
+
+const record = localRecord.findBy({ wow: 'cool' })
+
+console.log(record)
+{ wow: 'cool', awesome: 'neat' }
 ```
 ### .where()
 ...and of course you can query by collection using `.where()`
+
 ```javascript
 localRecord.create({ height: 'tall', eyes: 'brown' })()
 localRecord.create({ height: 'tall', eyes: 'green' })()
@@ -74,9 +83,10 @@ localRecord.create({ height: 'tall', eyes: 'blue' })()
 
 const records = localRecord.where({ height: 'tall' })
 
-/* returns [{ height: 'tall', eyes: 'brown'},
-            { height: 'tall', eyes: 'green'},
-            { height: 'tall', eyes: 'blue'}] */
+console.log(records)
+/* [{ height: 'tall', eyes: 'brown'},
+    { height: 'tall', eyes: 'green'},
+    { height: 'tall', eyes: 'blue'}] */
 ```
 
 ##### Warning
@@ -99,6 +109,14 @@ else {
   // failure control flow
 }
 ```
+```javascript
+// this is useful for memoizing your variables if your jumbling a lot of manual references
+const newRecord = localRecord.create({ wow: 'neat' })
+
+const savedRecord = newRecord('mightBeTaken') || newRecord()
+
+```
+
 The second function call will return false under two conditions:
  - An exact copy of the object already exists in localStorage
  ```javascript
@@ -121,31 +139,41 @@ const newRecord = localRecord.create({ wow: 'neat'})
 
 const mySavedRecord = newRecord()
 
-mySavedRecord // returns { wow: 'neat' }
+console.log(mySavedRecord)
+// { wow: 'neat' }
 ```
 
 ## .update()
-Similar to the `.create()` function, the `.update()` function also returns a curried function - but unlike `.create()` (and similar to ActiveRecord's update methods), `.update()` is a little more rigid with what it allows.
+Similar to ActiveRecord's update methods, `.update()` is a slightly more rigid than `.create()` with what it allows.
 ```javascript
-localRecord.create({ wow: 'cool' })()
+const existingObject = { wow: 'cool',
+                         neat: 'okay'}
+
+localRecord.create(existingObject)()
 
 // first argument MUST be the object
-const updatedRecord = localRecord.update({ wow: 'cool' })()
-// function returns updatedRecord on success
+// second argument are the changes to be made
+
+const updatedRecord = localRecord.update(existingObject, { wow: 'lets go' })
+
+console.log(updatedRecord)
+// { wow: 'lets go', neat: 'okay' }
 ```
 ```javascript
 localRecord.create({ wow: 'cool' })()
 
-localRecord.update('myObject')()
-// throws an InvalidArgumentError on second call if first function
-// doesn't receive an object
+localRecord.update('myObject', { wow: 'ok' })
+
+// throws an InvalidArgumentError first if it doesn't receive an object
 ```
 ```javascript
 // this record is not saved
+
 const nonExistentRecord = { wow: 'cool' }
 
-localRecord.update(nonExistentRecord)
-// throws a ReferenceError on first call if object does not exist in storage
+localRecord.update(nonExistentRecord, { wow: 'ok' })
+
+// throws a ReferenceError if object does not exist in storage
 ```
 
 Also, similar to ActiveRecord, you cannot update properties that don't exist on the object
@@ -153,9 +181,9 @@ Also, similar to ActiveRecord, you cannot update properties that don't exist on 
 const existingObject = { wow: 'cool' }
 localRecord.create(existingObject)()
 
-localRecord.update(existingObject)({ ok: 'neat' })
-// throws an UnknownPropertyError because 'ok' is not a property
-// on existing object
+localRecord.update(existingObject, { ok: 'neat' })
+
+// throws an UnknownPropertyError because 'ok' is not a property on existing object
 ```
 
 If you want to add a property to an existing object, you must use the improvised...
@@ -170,8 +198,11 @@ localRecord.create(existingObject)()
 
 // first argument is existing object
 // second argument is properties you wish to add (can be more than 1)
-localRecord.createProperty(existingObject, { ok: 'neat', super: 'awesome' })
-// returns { wow: 'cool', ok: 'neat', super: 'awesome' }
+
+const newObject = localRecord.createProperty(existingObject, { ok: 'neat', super: 'awesome' })
+
+console.log(newObject)
+// { wow: 'cool', ok: 'neat', super: 'awesome' }
 ```
 
 ## .destroy()
@@ -202,7 +233,5 @@ localRecord.create(secondRecord)()
 localRecord.create(thirdRecord)()
 
 localRecord.destroyAll()
-// returns [ { wow: 'ok' },
-//           { ok: 'neat' },
-//           { super: 'awesome' }]
+// returns [ { wow: 'ok' }, { ok: 'neat' }, { super: 'awesome' }]
 ```

@@ -12,7 +12,7 @@ describe('update', () => {
 
       localRecord.create(record)()
 
-      const updatedRecord = localRecord.update(record)({ height: 'tall' })
+      const updatedRecord = localRecord.update(record, { height: 'tall' })
 
       assert.deepEqual(updatedRecord, { height: 'tall' })
     })
@@ -25,7 +25,7 @@ describe('update', () => {
 
       localRecord.create(record)()
 
-      localRecord.update(record)({ height: 'short' })
+      localRecord.update(record, { height: 'short' })
 
       assert.deepEqual(record, { height: 'short', hair: 'brown' })
     })
@@ -38,14 +38,14 @@ describe('update', () => {
 
       localRecord.create(record)()
 
-      const attempt = localRecord.update(record).bind(localRecord, { eyes: 'green' })
+      const attempt = localRecord.update.bind(localRecord, record, { eyes: 'green' })
 
       assert.throws(attempt, Error, "unknown property 'eyes' for record")
     })
   })
 
   context('record does not exist', () => {
-    it('throws a ReferenceError on first function', () => {
+    it('throws a ReferenceError', () => {
       const record = { height: 'tall' }
       const query = localRecord.update.bind(localRecord, record)
 
@@ -59,7 +59,7 @@ describe('update', () => {
 
       localRecord.create(record)()
 
-      const attempt = localRecord.update(record).bind(localRecord, [{ height: 'short' }])
+      const attempt = localRecord.update.bind(localRecord, record, [{ height: 'short' }])
 
       assert.throws(attempt, Error, 'expected Object, but got Array instead')
     })
