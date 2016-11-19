@@ -34,7 +34,7 @@ console.log(localRecord.all())
 ```
 
 ## .create()
-When called, the `.create` function takes an argument that is the object that you want to create, it passed anything other than an object - an error will be thrown.
+When called, the `.create` function takes an argument that is the object that you want to create, if passed anything other than an object - an error will be thrown.
 ```javascript
 localRecord = new LocalRecord()
 localRecord.create({ wow: 'cool' }) // <= fine
